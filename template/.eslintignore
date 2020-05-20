@@ -2,6 +2,7 @@
 node_modules/
 /dist/
 /src/App.vue
+/src/utils/http.js
 npm-debug.log*
 /cache-loader/
 
