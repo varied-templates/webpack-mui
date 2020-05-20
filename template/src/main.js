@@ -13,8 +13,9 @@ Vue.prototype.$http = http; // 引入前后端交互工具
 {{#if_eq hasHotUpdate "Yes"}}
 import {
   Progress,
+  Dialog,
 } from 'vant';
-Vue.use(Progress);
+Vue.use(Progress).use(Dialog);
 {{/if_eq}}
 // 开始创建Vue实例
 new Vue({
