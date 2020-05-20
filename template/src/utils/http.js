@@ -1,51 +1,116 @@
-import axios from 'axios';
-// axios.defaults.baseURL = '';
-axios.defaults.responseType = 'json';
-axios.defaults.timeout = 100000;
-
-// Add a response interceptor
-axios.interceptors.response.use(
-  function(response) {
-    let resData = response.data;
-    // 以下无数据的判断对取号接口适配
-    if (!resData) {
-      return Promise.reject('数据格式不对', response);
-    }
-    if (resData.code === 200 || resData.code === '200') {
-      return resData.data;
-    } else {
-      return Promise.reject(resData.message);
-    }
-  },
-  function(error) {
-    if (
-      error.code === 'ECONNABORTED' &&
-      error.message.indexOf('timeout') >= 0
-    ) {
-      return Promise.reject('请求超时');
-    } else {
-      return Promise.reject(error.message);
-    }
-  },
-);
-
-const get = (url, params) => {
-  return axios({
-    method: 'get',
-    withCredentials: true,
-    url,
-    params,
-    data: undefined,
-  });
-};
-
+import qs from 'qs';
+{{#if_eq hasHotUpdate "Yes"}}
+import {
+  Toast,
+  Dialog
+} from 'vant';
+{{/if_eq}}
 const post = (url, data) => {
-  return axios({
-    method: 'post',
-    withCredentials: true,
-    url,
-    pararms: undefined,
-    data,
+  data = qs.stringify(data);
+  {{#if_eq hasHotUpdate "Yes"}}
+  Toast.loading({
+    duration: 0, // 持续展示 toast
+    forbidClick: true,
+    message: '加载中',
+  });
+  {{/if_eq}}
+  return new Promise((resolve, reject) => {
+    if (process.env.NODE_ENV === 'production' && process.env.IOS) {
+      mui.plusReady(function () {
+        mui.ajax(url, {
+          data,
+          dataType: 'json', //服务器返回json格式数据
+          type: 'post', //HTTP请求类型
+          timeout: 10000, //超时时间设置为10秒；
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            token: localStorage.getItem("user_token")
+          },
+          success: function (resData) {
+            {{#if_eq hasHotUpdate "Yes"}}
+            Toast.clear();
+            {{/if_eq}}
+            if (resData.code === 1 || resData.code === '1') {
+              resolve(resData.data);
+            } else {
+              {{#if_eq hasHotUpdate "Yes"}}
+              Dialog.alert({
+                message: resData.msg,
+              }).then(() => {
+                // on close
+                reject(resData.msg);
+              });
+              {{/if_eq}}
+              {{#if_eq hasHotUpdate "No"}}
+              reject(resData.msg);
+              {{/if_eq}}
+            }
+          },
+          error: function (xhr, type, errorThrown) {
+            {{#if_eq hasHotUpdate "Yes"}}
+            Toast.clear();
+            Dialog.alert({
+              message: xhr.statusText,
+            }).then(() => {
+              // on close
+              reject(xhr);
+            });
+            {{/if_eq}}
+            {{#if_eq hasHotUpdate "No"}}
+            reject(xhr);
+            {{/if_eq}}
+          }
+        });
+      });
+    } else {
+      mui.ajax(url, {
+        data,
+        dataType: 'json', //服务器返回json格式数据
+        type: 'post', //HTTP请求类型
+        timeout: 10000, //超时时间设置为10秒；
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          token: localStorage.getItem("user_token")
+        },
+        success: function (resData) {
+          {{#if_eq hasHotUpdate "Yes"}}
+          Toast.clear();
+          {{/if_eq}}
+          if (resData.code === 1 || resData.code === '1') {
+            resolve(resData.data);
+          } else {
+            {{#if_eq hasHotUpdate "Yes"}}
+            Dialog.alert({
+              message: resData.msg,
+            }).then(() => {
+              // on close
+              reject(resData.msg);
+            });
+            {{/if_eq}}
+            {{#if_eq hasHotUpdate "No"}}
+            reject(resData.msg);
+            {{/if_eq}}
+          }
+        },
+        error: function (xhr, type, errorThrown) {
+          {{#if_eq hasHotUpdate "Yes"}}
+          Toast.clear();
+          {{/if_eq}}
+          Dialog.alert({
+            message: xhr.statusText,
+          }).then(() => {
+            // on close
+            reject(xhr);
+          });
+          {{/if_eq}}
+          {{#if_eq hasHotUpdate "No"}}
+          reject(xhr);
+          {{/if_eq}}
+        }
+      });
+    }
   });
 };
-export default { get, post };
+export default {
+  post
+};

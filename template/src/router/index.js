@@ -6,7 +6,12 @@ Vue.use(Router); // 启用router插件
 
 // 以下是路由配置
 let router = new Router({
+{{#if_eq routerMode "history"}}
   mode: 'history',
+{{/if_eq}}
+{{#if_eq routerMode "hash"}}
+  mode: 'hash',
+{{/if_eq}}
   routes: [
     {
       path: '/',

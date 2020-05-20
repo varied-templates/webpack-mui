@@ -61,10 +61,22 @@ module.exports = {
                     value: 'Mobile',
                     short: 'Mobile',
                 },
+            ]
+        },
+        routerMode: {
+            when: 'isNotTest',
+            type: 'list',
+            message: 'select router mode（选择路由模式）',
+            choices: [
                 {
-                    name: 'PC',
-                    value: 'PC',
-                    short: 'PC',
+                    name: 'hash',
+                    value: 'hash',
+                    short: 'hash',
+                },
+                {
+                    name: 'history',
+                    value: 'history',
+                    short: 'history',
                 },
             ]
         },
@@ -88,7 +100,24 @@ module.exports = {
         hasComponent: {
             when: 'isNotTest',
             type: 'list',
-            message: 'has component or not（是否有组件）',
+            message: 'has component or not（是否安装variedUI组件）',
+            choices: [
+                {
+                    name: 'Yes',
+                    value: 'Yes',
+                    short: 'Yes',
+                },
+                {
+                    name: 'No',
+                    value: 'No',
+                    short: 'No',
+                },
+            ]
+        },
+        hasHotUpdate: {
+            when: 'isNotTest',
+            type: 'list',
+            message: 'has hot update or not（是否要热更新）',
             choices: [
                 {
                     name: 'Yes',

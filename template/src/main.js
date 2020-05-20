@@ -10,7 +10,12 @@ import router from './router';
 import http from './utils/http';
 
 Vue.prototype.$http = http; // 引入前后端交互工具
-
+{{#if_eq hasHotUpdate "Yes"}}
+import {
+  Progress,
+} from 'vant';
+Vue.use(Progress);
+{{/if_eq}}
 // 开始创建Vue实例
 new Vue({
   el: '#app',

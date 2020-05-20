@@ -11,13 +11,19 @@ module.exports = {
     "@babel/plugin-transform-runtime",
     "@babel/plugin-syntax-dynamic-import",
     "@babel/plugin-proposal-object-rest-spread",
-    "transform-vue-jsx"{{#if_eq hasComponent "Yes"}}{{#if_eq deviceType "Mobile"}},
+    "transform-vue-jsx"{{#if_eq hasComponent "Yes"}},
     ["import", {
       "libraryName": "@varied/mobile",
       "libraryDirectory": "es",
       "style": name => `${name}/style`
     }]
     {{/if_eq}}
+      {{#if_eq hasHotUpdate "Yes"}},
+      ['import', {
+        libraryName: 'vant',
+        libraryDirectory: 'es',
+        style: true
+      }, 'vant']
     {{/if_eq}}
 ],
   "env": {
