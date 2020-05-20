@@ -95,7 +95,6 @@ const post = (url, data) => {
         error: function (xhr, type, errorThrown) {
           {{#if_eq hasHotUpdate "Yes"}}
           Toast.clear();
-          {{/if_eq}}
           Dialog.alert({
             message: xhr.statusText,
           }).then(() => {
