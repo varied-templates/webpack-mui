@@ -1,5 +1,6 @@
 'use strict';
 const MODE = process.env.NODE_ENV || 'production'; //命令行传入用于设置webpack mode + process.env.node_env
+const IOS = process.env.IOS || false;
 const webpack = require('webpack');
 const merge = require('webpack-merge'); // webpack merge 工具包
 const baseWebpackConfig = require('./webpack.base.conf'); // 基础配置引入
@@ -72,6 +73,7 @@ const prodWebpackConfig = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(MODE),
+        IOS: JSON.stringify(IOS),
       },
     }),
     new cleanWebpackPlugin(),
