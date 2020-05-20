@@ -68,7 +68,8 @@
                     let options = {
                       method: "GET"
                     };
-                    let dtask = plus.downloader.createDownload('http://dzdj.ybnettech.com/popular.wgt',
+                    let url = '';//更新包的地址
+                    let dtask = plus.downloader.createDownload(url,
                       options);
                     dtask.addEventListener("statechanged", function (task, status) {
                       switch (task.state) {
